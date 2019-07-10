@@ -30,11 +30,11 @@ elasticband <- data.frame(stretch = c(46, 54, 48, 50, 44, 42, 52),
 
 # b. Which is the dependent variable, and which is the independent variable? Which axis should
 # each be plotted on?
-
+# dependent is distance, independent is stretch
 
 # c. In the data frame called elasticband, plot distance against stretch. Label your axes and the plot.
 # Reminder: scatter plot syntax is: plot(formula=y~x, data=dataframe, main="plot title")
-
+plot(formula=distance~stretch, data=elasticband, main="Stretch vs Distance of Elastic Bands")
 
 # -------------------------------------------------------------
 
@@ -64,20 +64,20 @@ snowcover <- data.frame(year=c(1970:1979),
 
 # b. Which is the dependent variable, and which is the independent variable? Which axis should
 # each be plotted on?
-
+# dependent is snow cover, independent is year
 
 # c. Plot snow.cover versus year. Label your axes and the plot.
-
+plot(formula=snow.cover~year, data =snowcover, main="Snow cover in Eurasia")
 
 # d. Use the hist() command to plot a histogram of the snow cover values. Label your axes and the plot. 
 # Hint: use the histogram syntax: hist(x=data, xlab="x-label", main="title")
-
+hist(snow.cover, xlab="Amount of snow", main="Snow cover")
 
 # e. Find the R summary of the snow cover column. Then make a boxplot of the snow cover column.
 # The boxplot should just be a graphical representation of the statistical summary you printed.
 # Hint: use the summary() command, and boxplot syntax: boxplot(x=data, ylab="y-label", main="title")
-
-
+summary(snowcover[,"snow.cover"])
+boxplot(snowcover[,"snow.cover"], ylab="amount of snow", main="snow in euraisa")
 # -------------------------------------------------------------
 
 # 3. Mammals data frame
@@ -89,19 +89,22 @@ data(mammals, package="MASS")
 
 # a. Use the cor() function to find the correlation coefficient for body and brain weights. 
 # What does this coefficient suggest about the body and brain weights of land mammals?
-
+cor(mammals)
 
 # b. Plot the data using the plot command, and label the plot and axes (include units). 
 # You should be unsatisfied with this plot. Next, plot the logarithm (log) of each 
 # variable; does that make a difference?
-
-
+plot(formula=brain~body, data=mammals, xlab="body size (kg)", ylab="brain saize (g)", main="body vs brain size mammals")
+plot(formula=log(brain)~log(body), data=mammals, xlab="body size (kg)", ylab="brain saize (g)", main="body vs brain size mammals")
 # c. Overlay the log-log plot with a linear model. Are you satisfied with the fit?
 #     Hint: the linear model takes the form lm(y~x). To overplot, call abline() on the linear model.
 #     Don't forget that you have taken the log of the quantities on both axes.
-#
+y=log(brain)
+x=log(body)                 # had to deifne the variables separately, probably not needed
+abline(lm(y~x))
+abline(lm(formula=log(brain)~log(body)),
 # What do your log-log plots and the correlation results suggest about the data?
-
+# 
 # -------------------------------------------------------------
 
 # 4. Cars93 plots
@@ -110,32 +113,45 @@ data(mammals, package="MASS")
 # the plot examples from class to create these plots.
 
 # load the data:
-data(Cars93, package="MASS")
-cr=Cars93
+data(Cars93, package="MASS"),
+cr=Cars93,
 
 #
 # a. Make a histogram and density plot of Engine Size (displacement), plotted on the same
 #   'page'. Label the axes on the histogram. Compare the histogram and density plots.
+d=density(cr$EngineSize),
+hist(cr[, "EngineSize"], xlab="Engine size (L)", main="Engine size frequency", prob=TRUE),     #prob has to =TRUE to put the hist y-axis be density
+lines(density(x=cr$EngineSize)),
+
 
 
 # b. Make a boxplot of the Cars93 dataset drivetrain types with engine RPM. Label the axes and the plot.
 #   Use color to distinguish the categorical variable values.
-# 
+boxplot(formula=RPM~DriveTrain,
+        data=cr,
+        main="RPM for drivetrain types", 
+        xlab="Drivetrain types",
+        ylab="Engine RPM", 
+        col=c("red", "green", "blue")
+),
 #   Remind yourself:
 #   What do the ends of the boxes and the dotted lines mean? Are there any outliers? Can you find
 #   the cars represented by them?
-
-
+summary(cr$RPM),
+subset(cr, DriveTrain=="4WD", select=RPM),
+summary(subset(cr, DriveTrain=="4WD", select=RPM)),
 # c. For this exercise, don't worry about labels or nice presentation; concentrate on comparing the
 #    different plot types:
 #
 #     Create a simple histogram, a density plot, and a barplot of the Luggage Room variable from the Cars93 
 #     dataset. Which representation makes more sense to you? Would a pie chart be
 #     an effective way to represent this information about the Cars93 dataset?
-
-
+hist(cr$Luggage.room, prob=TRUE)
+lines(density(x=cr$Luggage.room, na.rm=TRUE))
+barplot(table(cr$Luggage.room))
 # d. Make a barplot of the Cars93 dataset by origin (USA/non USA) broken down by manual transmission
 #   availability.
+
 #   Don't forget to include a legend that indicates the color coding of the categorical variables,
 #   and label your axes and the plot appropriately.
 #   Can you conclude anything about whether Americans seem to prefer a manual or automatic transmission?

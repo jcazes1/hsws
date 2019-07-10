@@ -22,15 +22,15 @@
 # Does this confirm or change your explanation? What does paste()
 # do?
 #
-# c. Is it possible to call the function with an vector or other data
+# c. Is it possible to call the function with a vector or other data
 # structure? With a non-numeric value? Why or why not? (Try it!)
 # What happens?
 #
 # d. Create a vector of ages called ages, and call the drivingTest
 # function using the sapply() function. Example: ages = c(12, 16, 18)
 # Syntax Tip: try the following:
-#
-#     > sapply(ages, drivingTest)
+ages = c(12, 16, 18)
+      sapply(ages, drivingTest)
 #
 # What happens? What do you notice about the output?
 
@@ -63,15 +63,18 @@ drivingTest(age);
 #
 # Write a simple function that accepts a numeric value, in miles, and
 # converts the value(s) to kilometers.
-#
+toKilo=function(mi){
+  kilo = ((8/5)*mi)
+  return (kilo)
+}
 # Use the following information:
-#   kilometers = (8/5) * miles
+  kilo = (8/5) * mi
 #
 # Test the function with the following vector, and print the results.
-miles = c(50, 100, 200, 275)
-
+mi = c(50)
+toKilo(mi)
 # What is the type (class) of the output, given the input vector miles?
-
+class(kilo)
 # What is the type (class) of the output if you supply a single numeric value?
 # What about a single character value?
 
@@ -81,7 +84,26 @@ miles = c(50, 100, 200, 275)
 # Write a simple function that prints out the mean and standard deviation
 # of an input set of numbers. Test the result on the body and brain columns of
 # the dataset mammals (mammals$body in units of kg, mammals$brain in units of g).
-#
+avgSD=function(mammals){
+  meanBody = mean(mammals$body)
+  sdBody = sd(mammals$body)
+  meanBrain = mean(mammals$brain)
+  sdBrain = sd(mammals$brain)
+
+  return (paste(meanBody, "kg is the Body mean and ", sdBody, "g is the Body sd. ", 
+                meanBrain, "kg is the Brain mean and ", sdBrain, "g is the Brain sd."))
+}
+
+avgSD=function(mammals){
+     avg.value=c(mean(mammals$body), mean(mammals$brain))
+     sd.value=c(sd(mammals$body), sd(mammals$brain))
+     
+     return(print(bodyBrainData=data.frame(Mean=avg.value,
+                                           StandardDeviation=sd.value,
+                                           row.names=())))
+   }
+
+avgSD(mammals)
 # Hints:
 #   - The native R function mean() can be used for the mean.
 #   - The standard deviation is calculated as the square root (sqrt()) of the variance (var())
@@ -102,6 +124,7 @@ library(MASS) # loads the dataset called "mammals"
 
 # You can use the apply() family on a native R function, on a function you wrote yourself.
 
+
 # a. First, create the sample dataset of US car data by running the following:
 data(car.test.frame, package = "rpart")
 US = car.test.frame[car.test.frame$Country=="USA", ]    # Only use American Cars
@@ -109,15 +132,17 @@ US = droplevels(US[ ,c(1,4,6:8)])                       # Only use specified col
 
 # b. Call head(), View(), or str() on the US dataset, to get a sense of the contents.
 # How many columns does it have? What are their types?
-
+head(US)
+View(US)
+str(US)
 # c. Now, call the sapply function on the US dataset, to apply the mean function to it.
-
+sapply(US, mean)
 # Hint: Use the syntax sapply(US, mean). Do you agree that this is equivalent to running
 # mean(US$Price), followed by mean(US$Mileage), followed by the mean function of each other
 # column in the US data frame? Can you see the use of the apply() family?
 
 # d. Call the sapply function on the US dataset and the range function.
-
+sapply(US, range)
 # ------------------------------
 
 # 4.b. by() function
@@ -132,23 +157,25 @@ US = droplevels(US[ ,c(1,4,6:8)])                       # Only use specified col
 # or on a function you wrote yourself.
 
 # First, show yourself what by() does. For this, we'll use the iris dataset.
-attach(iris)
+attach(iris) 
 
 # Use the mean() function to find the overall mean of the iris Petal.Width column.
 # Hint: use a call like: mean(iris[,"Petal.Width"])
-
+mean(iris[,"Petal.Width"])
 # Then, use the by() function to find the mean of the Petal.Width column for each
 # iris Species.  Hint: use a call like: by(iris[,"Petal.Width"], Species, mean)
-
+by(iris[,"Petal.Width"], Species, mean)
 # Using the output of the by() call, find the mean of the means for all species.
 # It should match the overall mean you computed.
-
+mean(by(iris[,"Petal.Width"], Species, mean))
 # a. Now, create a sample dataset of car data by running the following:
 d = droplevels(Cars93[,c(3,5,7,8,12)] )                # Only use specified columns
 
 # b. Call head(), View(), or str() on the d dataset, to get a sense of the contents.
 # How many columns does it have? What are their types?
-
+head(d)
+View(d)
+str(d)
 # To find out more about the columns in the dataset, type:
 ?Cars93
 
@@ -160,15 +187,20 @@ d = droplevels(Cars93[,c(3,5,7,8,12)] )                # Only use specified colu
 # column while grouping on auto Type. Which auto type has the highest median price?
 # What about the lowest median price? (Note that price is reported in thousands of dollars).
 
-# Use by() to determine how many cars in our dataset are found for each Type.
 
+by(d[,"Price"],d$Type,summary)
+
+
+# Use by() to determine how many cars in our dataset are found for each Type.
+by(d[,"Type"], d$Type, length)
 # d. Call the by() function on the d dataset, to apply the colMeans function to the
-# MPG and engine size columns, while grouping on auto Type. What does colMeans do?
-# What happens if you try to use the mean() function with by()?
+# MPG and engine size columns, while grouping on auto Type. 
+by(d[,c(3,4,5)], d$Type, colMeans)
+# What does colMeans do? What happens if you try to use the mean() function with by()?
 
 # e. Call the by() function on the d dataset, to determine the standard deviation (sd) of
 # the engine size column, while grouping on auto Type.
-
+by(d[,"EngineSize"], d$Type, sd)
 # Which auto type has the largest variation (standard deviation) about the engine size mean?
 # Which type has the smallest and largest mean engine size? Any surprises there?
 # Does the by() function make it easy to answer a question like this one?
@@ -185,14 +217,14 @@ doMedian <- function(vec) {
 
     # is the input vector’s length even or odd?
     if (size %% 2 == 0) {
-
-            # Even: return mean of elements around the central element
-            out <- mean( c(vec[size/2], vec[1+size/2]) )
+      
+      # Even: return mean of elements around the central element
+      out <- mean( c(vec[size/2], vec[1+size/2]) )
     } else {
-
-            # Odd: return central element
-            out <- vec[1+size/2]
-      }
+      
+      # Odd: return central element
+      out <- vec[1+size/2]
+    }
     return(out)
 }
 
@@ -227,13 +259,29 @@ doMedian(m)
 
 # How does the output compare to the expected result? (How would you check?)
 # Hint: try summary()
-
+summary(m)
 # What did our function compute? Can you prove it?
-
+new.vector=c(y,z)
+median(new.vector)
 # Can you think of a way to ensure our function generates the correct answer?
 # Would you want to rewrite it, or check the input before computing, or something
 # else?
-
+doMedian2 <- function(vec) {
+  vec <- sort(vec) # sort the input vector
+  size <- length(vec)
+  
+  # is the input vector’s length even or odd?
+  if (size %% 2 == 0) {
+    
+    # Even: return mean of elements around the central element
+    out <- mean( c(vec[size/2], vec[1+size/2]) )
+  } else {
+    
+    # Odd: return central element
+    out <- vec[1+size/2]
+  }
+  return(out)
+}
 
 # ------------------------------
 

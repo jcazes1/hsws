@@ -45,11 +45,11 @@
 # be all capitals (case is important in R).
 
 # b. In R, determine whether u and v are both true.
-
+u&v
 # c. In R, determine whether at least one of u OR v is true.
-
+u|v
 # d. In R, find the opposite of v. 
-
+!v
 # When done with the exercise, use the broom icon to clear your RStudio workspace.
 
 # ---------------------------------
@@ -57,14 +57,16 @@
 # 3. Strings and concatenation 
 
 # a. Assign your first and last names to R two separate R variables.
-
+first.name="Jacob"
+last.name="Cazes"
 # b. Use the function paste() to assign the result to a new variable.
 # If you need to look up how to use paste, enter "?paste" at the
 # command line to bring up the help page.
-
+full.name=paste(first.name, last.name)
 # c. Print the new variable. Print its type (use the function class(), or look
 # in the Environment tab's Grid view).
-
+print(full.name)
+print(class(full.name))
 # When done with the exercise, use the broom icon to clear your RStudio workspace.
 
 # ---------------------------------
@@ -78,13 +80,13 @@ celsius = c(20:25)	# sets a vector variable to contain the integers 20 through 2
 
 # a. Complete the assignment for the fahrenheit variable. For the formula, refer to: 
 # http://www.metric-conversions.org/temperature/celsius-to-fahrenheit.htm
-# fahrenheit =
+fahrenheit =(9/5)*celsius+32
 
 # b. Uncomment this line to create a data frame containing the temperature conversion:
-# conversion = data.frame(Celsius=celsius, Fahrenheit=fahrenheit)
-
+conversion = data.frame(Celsius=celsius, Fahrenheit=fahrenheit)
+# making a dataframe
 # c. Print the temperature conversion.
-
+print(conversion)
 # You should see:
 #   Celsius Fahrenheit
 # 1      20       68.0
@@ -95,14 +97,17 @@ celsius = c(20:25)	# sets a vector variable to contain the integers 20 through 2
 # 6      25       77.0
 
 # Did you do the conversion correctly?
-
+yes
 # d. Find and print the class of each variable. What are other ways to 
 # get this information? 
 
 # e. Find and print the structure of each variable. Use the functions str() and dim().
 # Take a look at the help pages for these functions, using ?str at the command line
 # or referring to the help pane in RStudio.
-
+str(celsius)
+str(fahrenheit)
+dim(celsius)
+dim(fahrenheit)
 # From what you learned about the functions str() and dim():
 # What do you think is going on with the celsius and fahrenheit variables?
 # What about the conversion variable? 
